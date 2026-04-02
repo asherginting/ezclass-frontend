@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const callCount: Record<string, number> = {};
 
 export async function GET(
-  _: Request,
-  { params }: { params: { taskId: string } },
+  _: NextRequest,
+  { params }: { params: Promise<{ taskId: string }> },
 ) {
-  const { taskId } = params;
+  const { taskId } = await params;
 
   callCount[taskId] = (callCount[taskId] || 0) + 1;
 
