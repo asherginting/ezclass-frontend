@@ -1,36 +1,163 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EZclass Frontend Technical Assessment
 
-## Getting Started
+## 🧰 Tech Stack
 
-First, run the development server:
+* **Next.js (App Router)**
+* **TypeScript**
+* **React Query (@tanstack/react-query)** — async state & polling
+* **Tailwind CSS** — styling
+* **Zod** — schema validation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Features
+
+### 📝 Test Submission
+
+* Multiple-choice questions (3 questions)
+* Dynamic answer state handling
+* Client-side validation using Zod
+* Disabled submit button until all questions are answered
+
+---
+
+### 🔄 Async Processing Flow
+
+* Submit answers to mock API
+* Receive `taskId`
+* Poll result endpoint every 2 seconds
+* Stop polling when processing is complete
+
+---
+
+### 📊 Result View
+
+* Loading / processing state
+* Error handling with retry
+* Final result display:
+
+  * Score
+  * Level
+  * Certificate link
+* Restart test functionality
+
+---
+
+## 🧠 Architecture & Approach
+
+This project follows a **feature-based architecture** to keep the codebase scalable and maintainable.
+
+```
+src/
+  app/                → routing & pages
+  features/
+    placement-test/
+      components/     → UI components
+      hooks/          → React Query logic
+      services/       → API layer
+      data/           → mock questions
+      schema/         → validation (Zod)
+      types/          → TypeScript types
+  lib/
+    react-query.tsx   → Query client provider
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Key Principles
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **Separation of concerns**
+* **Reusable components**
+* **Typed API contracts**
+* **Minimal but effective abstraction**
+* **Production-oriented structure**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔌 API Design (Mocked)
 
-To learn more about Next.js, take a look at the following resources:
+### POST `/api/placement-test/submit`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* Accepts user answers
+* Returns:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```json
+{
+  "taskId": "string",
+  "status": "processing"
+}
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### GET `/api/placement-test/result/:taskId`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Simulates async processing
+* Returns either:
+
+```json
+{
+  "status": "processing"
+}
+```
+
+or
+
+```json
+{
+  "status": "completed",
+  "score": 85,
+  "level": "Intermediate",
+  "certificateUrl": "https://example.com/certificate.pdf"
+}
+```
+
+---
+
+## ⚙️ Getting Started
+
+### Install dependencies
+
+```bash
+pnpm install
+```
+
+### Run development server
+
+```bash
+pnpm dev
+```
+
+App will be available at:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 🧪 Notes on Implementation
+
+* Polling is handled using **React Query's `refetchInterval`**
+* API is mocked using **Next.js Route Handlers**
+* The UI prioritizes **clarity and UX feedback** over visual complexity
+* Error and loading states are treated as first-class citizens
+
+---
+
+## 🌐 Deployment
+
+The application is deployed using **Vercel**.
+
+---
+
+## 📌 Final Thoughts
+
+This project focuses on simulating real-world frontend challenges:
+
+* async workflows
+* state management
+* API interaction
+* user experience under uncertainty
+
+Rather than over-engineering, the goal was to build a **clean, maintainable, and production-aware solution**.
+
+---
